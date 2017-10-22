@@ -74,7 +74,7 @@ export const appRouter = [
         title: '小吃列表',
         component: Main,
         children: [
-            { path: 'index', title: '小吃列表', name: 'list_index', component: resolve => { require(['./views/home/home.vue'], resolve); } }
+            { path: 'index', title: '小吃列表', name: 'list_index', component: resolve => { require(['./views/snack/snack.vue'], resolve); } }
         ]
     },
     {
