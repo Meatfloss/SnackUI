@@ -67,6 +67,17 @@ export const otherRouter = {
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
     {
+        path: '/list',
+        redirect: '/list/index',
+        icon: 'checkmark-circled',
+        name: 'list',
+        title: '小吃列表',
+        component: Main,
+        children: [
+            { path: 'index', title: '小吃列表', name: 'list_index', component: resolve => { require(['./views/home/home.vue'], resolve); } }
+        ]
+    },
+    {
         path: '/access',
         redirect: '/access/index',
         icon: 'key',
