@@ -67,14 +67,25 @@ export const otherRouter = {
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
     {
-        path: '/list',
-        redirect: '/list/index',
+        path: '/snacks',
+        redirect: '/snacks/index',
         icon: 'checkmark-circled',
-        name: 'list',
+        name: 'snacks',
         title: '小吃列表',
         component: Main,
         children: [
-            { path: 'index', title: '小吃列表', name: 'list_index', component: resolve => { require(['./views/snack/snack.vue'], resolve); } }
+            { path: 'index', title: '小吃列表', name: 'snack_index', component: resolve => { require(['./views/snack/snack.vue'], resolve); } }
+        ]
+    },
+    {
+        path: '/snacks',
+        redirect: '/snacks/add',
+        icon: 'checkmark-circled',
+        name: 'addsnack',
+        title: '添加小吃',
+        component: Main,
+        children: [
+            { path: 'add', title: '小吃列表', name: 'snack_add', component: resolve => { require(['./views/snack/addSnack.vue'], resolve); } }
         ]
     },
     {
