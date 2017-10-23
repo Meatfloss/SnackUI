@@ -44,13 +44,11 @@ router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
     if (Cookies.get('locking') === '1' && to.name !== 'locking') {  // 判断当前是否是锁定状态
-        iView.LoadingBar.finish();
         next(false);
         router.replace({
             name: 'locking'
         });
     } else if (Cookies.get('locking') === '0' && to.name === 'locking') {
-        iView.LoadingBar.finish();
         next(false);
     } else {
         if (!Cookies.get('user') && to.name !== 'login') {  // 判断是否已经登录且前往的页面不是登录页
@@ -58,13 +56,28 @@ router.beforeEach((to, from, next) => {
                 name: 'login'
             });
         } else if (Cookies.get('user') && to.name === 'login') {  // 判断是否已经登录且前往的是登录页
+            Util.title();
             next({
-                name: 'home'
+                name: 'home_index'
             });
         } else {
-            next();
+            if (Util.getRouterObjByName([otherRouter, ...appRouter], to.name).access !== undefined) {  // 判断用户是否有权限访问当前页
+                if (Util.getRouterObjByName([otherRouter, ...appRouter], to.name).access === parseInt(Cookies.get('access'))) {
+                    // next();
+                    Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next);  // 如果在地址栏输入的是一级菜单则默认打开其第一个二级菜单的页面
+                } else {
+                    router.replace({
+                        name: 'error_401'
+                    });
+                    next();
+                }
+            } else {
+                // next();
+                Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next);
+            }
         }
     }
+    iView.LoadingBar.finish();
 });
 
 router.afterEach(() => {
@@ -113,11 +126,13 @@ const store = new Vuex.Store({
             state.pageOpenedList.push(tagObj);
         },
         initCachepage (state) {
-            state.cachePage = JSON.parse(localStorage.pageOpenedList).map(item => {
-                if (item.name !== 'home_index') {
-                    return item.name;
-                }
-            });
+            if (localStorage.pageOpenedList) {
+                state.cachePage = JSON.parse(localStorage.pageOpenedList).map(item => {
+                    if (item.name !== 'home_index') {
+                        return item.name;
+                    }
+                });
+            }
         },
         removeTag (state, name) {
             state.pageOpenedList.map((item, index) => {
@@ -208,10 +223,10 @@ const store = new Vuex.Store({
             appRouter.forEach((item, index) => {
                 if (item.access !== undefined) {
                     if (Util.showThisRoute(item.access, accessCode)) {
-                        if (item.children.length <= 1) {
+                        if (item.children.length === 1) {
                             menuList.push(item);
                         } else {
-                            let i = menuList.push(item);
+                            let len = menuList.push(item);
                             let childrenArr = [];
                             childrenArr = item.children.filter(child => {
                                 if (child.access !== undefined) {
@@ -222,14 +237,14 @@ const store = new Vuex.Store({
                                     return child;
                                 }
                             });
-                            menuList[i - 1].children = childrenArr;
+                            menuList[len - 1].children = childrenArr;
                         }
                     }
                 } else {
-                    if (item.children.length <= 1) {
+                    if (item.children.length === 1) {
                         menuList.push(item);
                     } else {
-                        let i = menuList.push(item);
+                        let len = menuList.push(item);
                         let childrenArr = [];
                         childrenArr = item.children.filter(child => {
                             if (child.access !== undefined) {
@@ -240,7 +255,9 @@ const store = new Vuex.Store({
                                 return child;
                             }
                         });
-                        menuList[i - 1].children = childrenArr;
+                        let handledItem = JSON.parse(JSON.stringify(menuList[len - 1]));
+                        handledItem.children = childrenArr;
+                        menuList.splice(len - 1, 1, handledItem);
                     }
                 }
             });
@@ -266,6 +283,8 @@ new Vue({
     mounted () {
         this.currentPageName = this.$route.name;
         this.$store.commit('initCachepage');
+        // 权限菜单过滤相关
+        this.$store.commit('updateMenulist');
     },
     created () {
         let tagsList = [];
@@ -277,5 +296,14 @@ new Vue({
             }
         });
         this.$store.commit('setTagsList', tagsList);
+    },
+    watch: {
+        '$route' (to) {
+            // if (Util.getRouterObjByName(this, to.name).access) {
+            //     if (Util.getRouterObjByName(this, to.name).access === parseInt(Cookies.get('access'))) {
+
+            //     }
+            // }
+        }
     }
 });

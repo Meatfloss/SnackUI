@@ -46,24 +46,30 @@ util.showThisRoute = function (itAccess, currentAccess) {
     }
 };
 
-util.getPathObjByName = function (vm, name) {
-    let pathObj = vm.$store.state.routers.filter((item) => {
-        if (item.children.length <= 1) {
-            return item.name === name;
-        } else {
-            let i = 0;
-            let childArr = item.children;
-            let len = childArr.length;
-            while (i < len) {
-                if (childArr[i].name === name) {
-                    return true;
+util.getRouterObjByName = function (routers, name) {
+    let routerObj = {};
+    routers.forEach(item => {
+        if (item.name === 'otherRouter') {
+            item.children.forEach((child, i) => {
+                if (child.name === name) {
+                    routerObj = item.children[i];
                 }
-                i++;
+            });
+        } else {
+            if (item.children.length === 1) {
+                if (item.children[0].name === name) {
+                    routerObj = item.children[0];
+                }
+            } else {
+                item.children.forEach((child, i) => {
+                    if (child.name === name) {
+                        routerObj = item.children[i];
+                    }
+                });
             }
-            return false;
         }
-    })[0];
-    return pathObj;
+    });
+    return routerObj;
 };
 
 util.setCurrentPath = function (vm, name) {
@@ -209,6 +215,26 @@ util.openNewPage = function (vm, name, argu) {
         localStorage.pageOpenedList = JSON.stringify(vm.$store.state.pageOpenedList); // 本地存储已打开页面
     }
     vm.$store.commit('setCurrentPageName', name);
+};
+
+util.toDefaultPage = function (routers, name, route, next) {
+    let len = routers.length;
+    let i = 0;
+    let notHandle = true;
+    while (i < len) {
+        if (routers[i].name === name && routers[i].redirect === undefined) {
+            route.replace({
+                name: routers[i].children[0].name
+            });
+            notHandle = false;
+            next();
+            break;
+        }
+        i++;
+    }
+    if (notHandle) {
+        next();
+    }
 };
 
 export default util;

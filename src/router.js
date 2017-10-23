@@ -53,7 +53,6 @@ export const locking = {
 export const otherRouter = {
     path: '/',
     name: 'otherRouter',
-    redirect: '/home',
     component: Main,
     children: [
         { path: 'home', title: '首页', name: 'home_index', component: resolve => { require(['./views/home/home.vue'], resolve); } },
@@ -90,7 +89,6 @@ export const appRouter = [
     },
     {
         path: '/access',
-        redirect: '/access/index',
         icon: 'key',
         name: 'access',
         title: '权限管理',
