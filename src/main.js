@@ -12,6 +12,7 @@ import VueI18n from 'vue-i18n';
 import Locales from './locale';
 import zhLocale from 'iview/src/locale/lang/zh-CN';
 import enLocale from 'iview/src/locale/lang/en-US';
+import zhTLocale from 'iview/src/locale/lang/zh-TW';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -21,7 +22,7 @@ Vue.use(iView);
 // 自动设置语言
 const navLang = navigator.language;
 const localLang = (navLang === 'zh-CN' || navLang === 'en-US') ? navLang : false;
-const lang = window.localStorage.getItem('language') || localLang || 'zh-CN';
+const lang = window.localStorage.lang || localLang || 'zh-CN';
 
 Vue.config.lang = lang;
 
@@ -29,8 +30,10 @@ Vue.config.lang = lang;
 const locales = Locales;
 const mergeZH = Object.assign(zhLocale, locales['zh-CN']);
 const mergeEN = Object.assign(enLocale, locales['en-US']);
+const mergeTW = Object.assign(zhTLocale, locales['zh-TW']);
 Vue.locale('zh-CN', mergeZH);
 Vue.locale('en-US', mergeEN);
+Vue.locale('zh-TW', mergeTW);
 
 // 路由配置
 const RouterConfig = {
@@ -63,7 +66,6 @@ router.beforeEach((to, from, next) => {
         } else {
             if (Util.getRouterObjByName([otherRouter, ...appRouter], to.name).access !== undefined) {  // 判断用户是否有权限访问当前页
                 if (Util.getRouterObjByName([otherRouter, ...appRouter], to.name).access === parseInt(Cookies.get('access'))) {
-                    // next();
                     Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next);  // 如果在地址栏输入的是一级菜单则默认打开其第一个二级菜单的页面
                 } else {
                     router.replace({
@@ -72,7 +74,6 @@ router.beforeEach((to, from, next) => {
                     next();
                 }
             } else {
-                // next();
                 Util.toDefaultPage([otherRouter, ...appRouter], to.name, router, next);
             }
         }
@@ -93,7 +94,11 @@ const store = new Vuex.Store({
         ],
         menuList: [],
         tagsList: [...otherRouter.children],
-        pageOpenedList: [],
+        pageOpenedList: [{
+            title: '首页',
+            path: '',
+            name: 'home_index'
+        }],
         currentPageName: '',
         currentPath: [
             {
@@ -105,7 +110,8 @@ const store = new Vuex.Store({
         openedSubmenuArr: [],  // 要展开的菜单数组
         menuTheme: '', // 主题
         theme: '',
-        cachePage: []
+        cachePage: [],
+        lang: ''
     },
     getters: {
 
@@ -145,6 +151,9 @@ const store = new Vuex.Store({
             let openedPage = state.pageOpenedList[get.index];
             if (get.argu) {
                 openedPage.argu = get.argu;
+            }
+            if (get.query) {
+                openedPage.query = get.query;
             }
             state.pageOpenedList.splice(get.index, 1, openedPage);
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
@@ -265,6 +274,10 @@ const store = new Vuex.Store({
         },
         setAvator (state, path) {
             localStorage.avatorImgPath = path;
+        },
+        switchLang (state, lang) {
+            state.lang = lang;
+            Vue.config.lang = lang;
         }
     },
     actions: {
@@ -296,14 +309,5 @@ new Vue({
             }
         });
         this.$store.commit('setTagsList', tagsList);
-    },
-    watch: {
-        '$route' (to) {
-            // if (Util.getRouterObjByName(this, to.name).access) {
-            //     if (Util.getRouterObjByName(this, to.name).access === parseInt(Cookies.get('access'))) {
-
-            //     }
-            // }
-        }
     }
 });

@@ -5,8 +5,8 @@
     <div class="main" :class="{'main-hide-text': hideMenuText}">
         <div class="sidebar-menu-con" :style="{width: hideMenuText?'60px':'200px', overflow: hideMenuText ? 'visible' : 'auto', background: $store.state.menuTheme === 'dark'?'#495060':'white'}">
             <div class="logo-con">
-                <img v-show="!hideMenuText"  src="../images/logo.jpg">
-                <img v-show="hideMenuText" src="../images/logo-min.jpg">
+                <img v-show="!hideMenuText"  src="../images/logo.jpg" key="max-logo" />
+                <img v-show="hideMenuText" src="../images/logo-min.jpg" key="min-logo" />
             </div>
             <sidebar-menu v-if="!hideMenuText" :menuList="menuList" :iconSize="14"/>
             <sidebar-menu-shrink :icon-color="menuIconColor" v-else :menuList="menuList"/>
@@ -127,6 +127,9 @@
             },
             cachePage () {
                 return this.$store.state.cachePage;
+            },
+            lang () {
+                return this.$store.state.lang;
             }
         },
         methods: {
@@ -139,6 +142,7 @@
                 this.userName = Cookies.get('user');
                 let messageCount = 3;
                 this.messageCount = messageCount.toString();
+                this.checkTag(this.$route.name);
             },
             toggleClick () {
                 this.hideMenuText = !this.hideMenuText;
@@ -218,6 +222,16 @@
                         name: 'locking'
                     });
                 }, 800);
+            },
+            checkTag (name) {
+                let openpageHasTag = this.pageTagsList.some(item => {
+                    if (item.name === name) {
+                        return true;
+                    }
+                });
+                if (!openpageHasTag) {  //  解决关闭当前标签后再点击回退按钮会退到当前页时没有标签的问题
+                    util.openNewPage(this, name, this.$route.params || {}, this.$route.query || {});
+                }
             }
         },
         watch: {
@@ -227,6 +241,10 @@
                 if (pathArr.length > 2) {
                     this.$store.commit('addOpenSubmenu', pathArr[1].name);
                 }
+                this.checkTag(to.name);
+            },
+            lang () {
+                util.setCurrentPath(this, this.$route.name);  // 在切换语言时用于刷新面包屑
             }
         },
         mounted () {
@@ -270,7 +288,7 @@
                     words: ''
                 };
                 let userName = Cookies.get('user');
-                if (hour < 6) {
+                if (hour > 5 && hour < 6) {
                     greetingWord = {title: '凌晨好~' + userName, words: '早起的鸟儿有虫吃~'};
                 } else if (hour >= 6 && hour < 9) {
                     greetingWord = {title: '早上好~' + userName, words: '来一杯咖啡开启美好的一天~'};
