@@ -68,7 +68,7 @@ export const appRouter = [
     {
         path: '/snacks',
         redirect: '/snacks/index',
-        icon: 'checkmark-circled',
+        icon: 'android-restaurant',
         name: 'snacks',
         title: '小吃列表',
         component: Main,
@@ -79,7 +79,7 @@ export const appRouter = [
     {
         path: '/snacks',
         redirect: '/snacks/add',
-        icon: 'checkmark-circled',
+        icon: 'android-add-circle',
         name: 'addsnack',
         title: '添加小吃',
         component: Main,
