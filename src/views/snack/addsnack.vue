@@ -60,34 +60,51 @@
 </template>
 
 <script>
-import cityData from './map-data/get-city-value.js';
-import homeMap from './components/map.vue';
-import dataSourcePie from './components/dataSourcePie.vue';
-import visiteVolume from './components/visiteVolume.vue';
-import serviceRequests from './components/serviceRequests.vue';
-import userFlow from './components/userFlow.vue';
-import countUp from './components/countUp.vue';
-import inforCard from './components/inforCard.vue';
-import mapDataTable from './components/mapDataTable.vue';
-import toDoListItem from './components/toDoListItem.vue';
-import util from '@/libs/util.js';
+import cityData from "./map-data/get-city-value.js";
+import homeMap from "./components/map.vue";
+import dataSourcePie from "./components/dataSourcePie.vue";
+import visiteVolume from "./components/visiteVolume.vue";
+import serviceRequests from "./components/serviceRequests.vue";
+import userFlow from "./components/userFlow.vue";
+import countUp from "./components/countUp.vue";
+import inforCard from "./components/inforCard.vue";
+import mapDataTable from "./components/mapDataTable.vue";
+import toDoListItem from "./components/toDoListItem.vue";
+import util from "@/libs/util.js";
 
 export default {
-        data () {
-            return {
-                formItem: {
-                    input: '',
-                    select: '',
-                    radio: 'male',
-                    checkbox: [],
-                    switch: true,
-                    date: '',
-                    time: '',
-                    slider: [20, 50],
-                    textarea: ''
-                }
-            }
-        }
-
+  data() {
+    return {
+      formItem: {
+        input: "",
+        select: "",
+        radio: "male",
+        checkbox: [],
+        switch: true,
+        date: "",
+        time: "",
+        slider: [20, 50],
+        textarea: ""
+      }
+    };
+  },
+  methods: {
+    createSnack() {
+      util.ajax
+        .post(`snacks`, this.formItem)
+        .then(response => {
+          //this.snacks = response.data;
+        //   for (var i = 0; i < response.data.length; i++) {
+        //     this.snacks.push({
+        //       name: response.data[i].name,
+        //       image: response.data[i].image_url
+        //     });
+        //   }
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
+    }
+  }
 };
 </script>
