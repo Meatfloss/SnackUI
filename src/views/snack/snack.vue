@@ -6,7 +6,7 @@
     <div class="home-main">
 
         <Row class="margin-top-10">
-            <Col :xs="24" :lg="12">
+            <Col :xs="24" :lg="24">
                 <Card>
                     <p slot="title">
                         <Icon type="pinpoint"></Icon>
@@ -15,115 +15,33 @@
                     <!-- <Row>
                         <Input v-model="searchConName1" icon="search" @on-change="handleSearch1" placeholder="请输入姓名搜索..." style="width: 200px" />
                     </Row> -->
-                    <Row class="margin-top-10 searchable-table-con1">
+                    <Row class="margin-top-10">
                         <Table :columns="snackColumns" :data="snacks"></Table>
                     </Row>
                 </Card>
             </Col>
         </Row>
-        <Row class="margin-top-10">
-            <Col span="8">
-                <Card>
-                    <p slot="title" class="card-title">
-                        <Icon type="android-map"></Icon>
-                        上周每日来访量统计
-                    </p>
-                    <div class="data-source-row">
-                        <visite-volume></visite-volume>
-                    </div>
-                </Card>
-            </Col>
-            <Col span="8" class="padding-left-10">
-                <Card>
-                    <p slot="title" class="card-title">
-                        <Icon type="ios-pulse-strong"></Icon>
-                        数据来源统计
-                    </p>
-                    <div class="data-source-row">
-                        <data-source-pie></data-source-pie>
-                    </div>
-                </Card>
-            </Col>
-            <Col span="8" class="padding-left-10">
-                <Card>
-                    <p slot="title" class="card-title">
-                        <Icon type="android-wifi"></Icon>
-                        各类用户服务调用变化统计
-                    </p>
-                    <div class="data-source-row">
-                        <user-flow></user-flow>
-                    </div>
-                </Card>
-            </Col>
-        </Row>
-        <Row class="margin-top-10">
-            <Card>
-                <p slot="title" class="card-title">
-                    <Icon type="ios-shuffle-strong"></Icon>
-                    上周每日服务调用量(万)
-                </p>
-                <div class="line-chart-con">
-                    <service-requests></service-requests>
-                </div>
-            </Card>
-        </Row>
+
     </div>
 </template>
 
 <script>
-import cityData from "./map-data/get-city-value.js";
-import homeMap from "./components/map.vue";
-import dataSourcePie from "./components/dataSourcePie.vue";
-import visiteVolume from "./components/visiteVolume.vue";
-import serviceRequests from "./components/serviceRequests.vue";
-import userFlow from "./components/userFlow.vue";
-import countUp from "./components/countUp.vue";
-import inforCard from "./components/inforCard.vue";
-import mapDataTable from "./components/mapDataTable.vue";
-import toDoListItem from "./components/toDoListItem.vue";
+// import cityData from "./map-data/get-city-value.js";
+// import homeMap from "./components/map.vue";
+// import dataSourcePie from "./components/dataSourcePie.vue";
+// import visiteVolume from "./components/visiteVolume.vue";
+// import serviceRequests from "./components/serviceRequests.vue";
+// import userFlow from "./components/userFlow.vue";
+// import countUp from "./components/countUp.vue";
+// import inforCard from "./components/inforCard.vue";
+// import mapDataTable from "./components/mapDataTable.vue";
+// import toDoListItem from "./components/toDoListItem.vue";
 import util from "@/libs/util.js";
 
 export default {
-  name: "home",
-  components: {
-    homeMap,
-    dataSourcePie,
-    visiteVolume,
-    serviceRequests,
-    userFlow,
-    countUp,
-    inforCard,
-    mapDataTable,
-    toDoListItem
-  },
+  name: "snacks",
   data() {
     return {
-      toDoList: [
-        {
-          title: "去iView官网学习完整的iView组件"
-        },
-        {
-          title: "去iView官网学习完整的iView组件"
-        },
-        {
-          title: "去iView官网学习完整的iView组件"
-        },
-        {
-          title: "去iView官网学习完整的iView组件"
-        },
-        {
-          title: "去iView官网学习完整的iView组件"
-        }
-      ],
-      count: {
-        createUser: 496,
-        visit: 3264,
-        collection: 24389305,
-        transfer: 39503498
-      },
-      cityData: cityData,
-      showAddNewTodo: false,
-      newToDoItemValue: "",
       snacks: [],
       snackColumns: [
         {
@@ -131,8 +49,65 @@ export default {
           title: "名字"
         },
         {
+          key: "price",
+          title: "价格",
+          sortable: true
+        },
+        {
+          key: "taste",
+          title: "味道"
+        },
+        {
+          key: "description",
+          title: "描述"
+        },
+        {
           key: "image",
           title: "图片链接"
+        }
+        ,
+        {
+          title: "操作",
+          key: "action",
+          width: 150,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.show(params.index);
+                    }
+                  }
+                },
+                "查看"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index);
+                    }
+                  }
+                },
+                "删除"
+              )
+            ]);
+          }
         }
       ]
     };
@@ -143,6 +118,18 @@ export default {
     }
   },
   methods: {
+    show(index) {
+      this.$Modal.info({
+        title: "用户信息",
+        content: `名字：${this.snacks[index].name}<br>价钱：${this.snacks[index]
+          .price}<br>味道：${this.snacks[index].taste || ""}<br>描述：${this.snacks[index].description || ""}`
+      });
+    },
+    remove(index) {
+      this.deleteSnack(this.snacks[index]);
+      this.snacks.splice(index, 1);
+
+    },
     getSnacks() {
       util.ajax
         .get(`snacks`)
@@ -150,7 +137,11 @@ export default {
           //this.snacks = response.data;
           for (var i = 0; i < response.data.length; i++) {
             this.snacks.push({
+              _id: response.data[i]._id,
               name: response.data[i].name,
+              price: response.data[i].price,
+              taste: response.data[i].taste.toString(),
+              description: response.data[i].description,
               image: response.data[i].image_url
             });
           }
@@ -160,26 +151,16 @@ export default {
         });
     },
 
-    addNewToDoItem() {
-      this.showAddNewTodo = true;
-    },
-    addNew() {
-      if (this.newToDoItemValue.length !== 0) {
-        this.toDoList.unshift({
-          title: this.newToDoItemValue
+    deleteSnack(snack) {
+      util.ajax
+        .delete(`snacks/${snack._id}`)
+        .then(response => {
+          //this.snacks = response.data;
+        })
+        .catch(e => {
+          this.errors.push(e);
         });
-        setTimeout(function() {
-          this.newToDoItemValue = "";
-        }, 200);
-        this.showAddNewTodo = false;
-      } else {
-        this.$Message.error("请输入待办事项内容");
-      }
     },
-    cancelAdd() {
-      this.showAddNewTodo = false;
-      this.newToDoItemValue = "";
-    }
   },
   mounted() {
     this.getSnacks();

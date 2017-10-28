@@ -10,7 +10,7 @@
         </p>
  <Form :model="formItem" :label-width="80">
         <FormItem label="小吃名字">
-            <Input v-model="formItem.input" placeholder="请输入"></Input>
+            <Input v-model="formItem.name" placeholder="请输入"></Input>
         </FormItem>
         <FormItem label="省">
             <Select v-model="formItem.select" placeholder="请选择">
@@ -28,15 +28,15 @@
         </FormItem>
 
         <FormItem label="价格">
-            <RadioGroup v-model="formItem.radio">
-                <Radio label="1">$</Radio>
-                <Radio label="2">$$</Radio>
-                <Radio label="3">$$$</Radio>
-                <Radio label="4">$$$$</Radio>
+            <RadioGroup v-model="formItem.price">
+                <Radio label="$"></Radio>
+                <Radio label="$$"></Radio>
+                <Radio label="$$$"></Radio>
+                <Radio label="$$$$"></Radio>
             </RadioGroup>
         </FormItem>
         <FormItem label="味道">
-            <CheckboxGroup v-model="formItem.checkbox">
+            <CheckboxGroup v-model="formItem.taste">
                 <Checkbox label="酸"></Checkbox>
                 <Checkbox label="甜"></Checkbox>
                 <Checkbox label="辣"></Checkbox>
@@ -45,13 +45,13 @@
             </CheckboxGroup>
         </FormItem>
         <FormItem label="描述">
-            <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+            <Input v-model="formItem.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
         </FormItem>
 
 
 
         <FormItem>
-            <Button type="primary">提交</Button>
+            <Button type="primary" @click="createSnack">提交</Button>
             <Button type="ghost" style="margin-left: 8px">取消</Button>
         </FormItem>
     </Form>
@@ -76,15 +76,15 @@ export default {
   data() {
     return {
       formItem: {
-        input: "",
+        name: "",
         select: "",
-        radio: "male",
-        checkbox: [],
+        price: "$",
+        taste: [],
         switch: true,
         date: "",
         time: "",
         slider: [20, 50],
-        textarea: ""
+        description: ""
       }
     };
   },
