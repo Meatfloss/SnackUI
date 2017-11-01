@@ -13,15 +13,16 @@
             <Input v-model="snack.name" placeholder="请输入"></Input>
         </FormItem>
         <FormItem label="省">
-            <Select v-model="snack.select" placeholder="请选择">
-                <Option v-for="p in provinces">{{p}}</Option>
+            <Select v-model="snack.province" placeholder="请选择">
+                <Option v-for="p in provinces" :value="p.value" :key="p.value">{{p.value}}</Option>
             </Select>
         </FormItem>
             <FormItem label="市">
-            <Select v-model="snack.select" placeholder="请选择">
-                <Option value="beijing">北京市</Option>
+            <Select v-model="snack.city" placeholder="请选择">
+                <Option v-for="c in cities" :value="c" :key="c">{{c}}</Option>
+                <!-- <Option value="beijing">北京市</Option>
                 <Option value="shanghai">上海市</Option>
-                <Option value="shenzhen">深圳市</Option>
+                <Option value="shenzhen">深圳市</Option> -->
             </Select>
         </FormItem>
 
@@ -67,17 +68,7 @@
 </template>
 
 <script>
-// import cityData from "./map-data/get-city-value.js";
-// import homeMap from "./components/map.vue";
-// import dataSourcePie from "./components/dataSourcePie.vue";
-// import visiteVolume from "./components/visiteVolume.vue";
-// import serviceRequests from "./components/serviceRequests.vue";
-// import userFlow from "./components/userFlow.vue";
-// import countUp from "./components/countUp.vue";
-// import inforCard from "./components/inforCard.vue";
-// import mapDataTable from "./components/mapDataTable.vue";
-// import toDoListItem from "./components/toDoListItem.vue";
-import {provinces} from "./data/city-data.js"
+import { provinces, cityInfo } from "./data/city-data.js";
 import util from "@/libs/util.js";
 
 export default {
@@ -85,11 +76,10 @@ export default {
     return {
       snack: this.getNewSnack(),
       provinces: provinces
-      //provinces: ['北京','上海']
     };
   },
   methods: {
-    createSnack() {
+    createSnack: function() {
       util.ajax
         .post(`snacks`, this.snack)
         .then(response => {
@@ -102,14 +92,22 @@ export default {
           this.errors.push(e);
         });
     },
-    getNewSnack() {
+    getNewSnack: function() {
       return {
         name: "",
-        select: "",
+        province: "",
+        city: "",
         price: "$",
         taste: [],
         description: ""
       };
+    }
+  },
+  computed: {
+    cities: function() {
+      return cityInfo[this.snack.province];
+      //this.cities = ["a", "b"];
+      //alert("Test!");
     }
   }
 };
