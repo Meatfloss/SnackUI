@@ -14,7 +14,7 @@
         </FormItem>
         <FormItem label="省">
             <Select v-model="snack.province" placeholder="请选择">
-                <Option v-for="p in provinces" :value="p.value" :key="p.value">{{p.value}}</Option>
+                <Option v-for="p in provinces" :value="p" :key="p">{{p}}</Option>
             </Select>
         </FormItem>
             <FormItem label="市">
@@ -105,9 +105,9 @@ export default {
   },
   computed: {
     cities: function() {
-      return cityInfo[this.snack.province];
-      //this.cities = ["a", "b"];
-      //alert("Test!");
+      var result = cityInfo[this.snack.province];
+      this.snack.city = result && result.length > 0 && result[0];
+      return result;
     }
   }
 };
