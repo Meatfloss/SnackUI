@@ -111,7 +111,9 @@ const store = new Vuex.Store({
         menuTheme: '', // 主题
         theme: '',
         cachePage: [],
-        lang: ''
+        lang: '',
+        isFullScreen: false,
+        dontCache: ['text-editor']  // 在这里定义你不想要缓存的页面的name属性值(参见路由配置router.js)
     },
     getters: {
 
@@ -128,16 +130,15 @@ const store = new Vuex.Store({
             });
         },
         increateTag (state, tagObj) {
-            state.cachePage.push(tagObj.name);
+            if (!Util.oneOf(tagObj.name, state.dontCache)) {
+                state.cachePage.push(tagObj.name);
+                localStorage.cachePage = JSON.stringify(state.cachePage);
+            }
             state.pageOpenedList.push(tagObj);
         },
         initCachepage (state) {
-            if (localStorage.pageOpenedList) {
-                state.cachePage = JSON.parse(localStorage.pageOpenedList).map(item => {
-                    if (item.name !== 'home_index') {
-                        return item.name;
-                    }
-                });
+            if (localStorage.cachePage) {
+                state.cachePage = JSON.parse(localStorage.cachePage);
             }
         },
         removeTag (state, name) {
@@ -163,7 +164,7 @@ const store = new Vuex.Store({
             router.push({
                 name: 'home_index'
             });
-            state.cachePage = [];
+            state.cachePage.length = 0;
             localStorage.pageOpenedList = JSON.stringify(state.pageOpenedList);
         },
         clearOtherTags (state, vm) {
@@ -278,6 +279,33 @@ const store = new Vuex.Store({
         switchLang (state, lang) {
             state.lang = lang;
             Vue.config.lang = lang;
+        },
+        handleFullScreen (state) {
+            let main = document.body;
+            if (state.isFullScreen) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitCancelFullScreen) {
+                    document.webkitCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            } else {
+                if (main.requestFullscreen) {
+                    main.requestFullscreen();
+                } else if (main.mozRequestFullScreen) {
+                    main.mozRequestFullScreen();
+                } else if (main.webkitRequestFullScreen) {
+                    main.webkitRequestFullScreen();
+                } else if (main.msRequestFullscreen) {
+                    main.msRequestFullscreen();
+                }
+            }
+        },
+        changeFullScreenState (state) {
+            state.isFullScreen = !state.isFullScreen;
         }
     },
     actions: {
@@ -298,6 +326,19 @@ new Vue({
         this.$store.commit('initCachepage');
         // 权限菜单过滤相关
         this.$store.commit('updateMenulist');
+        // 全屏相关
+        document.addEventListener('fullscreenchange', () => {
+            this.$store.commit('changeFullScreenState');
+        });
+        document.addEventListener('mozfullscreenchange', () => {
+            this.$store.commit('changeFullScreenState');
+        });
+        document.addEventListener('webkitfullscreenchange', () => {
+            this.$store.commit('changeFullScreenState');
+        });
+        document.addEventListener('msfullscreenchange', () => {
+            this.$store.commit('changeFullScreenState');
+        });
     },
     created () {
         let tagsList = [];
