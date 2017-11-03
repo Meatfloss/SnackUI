@@ -84,7 +84,18 @@ export const appRouter = [
         title: '添加小吃',
         component: Main,
         children: [
-            { path: 'add', title: '小吃列表', name: 'snack_add', component: resolve => { require(['./views/snack/addSnack.vue'], resolve); } }
+            { path: 'add', title: '小吃列表', name: 'snack_add', component: resolve => { require(['./views/snack/addsnack.vue'], resolve); } }
+        ]
+    },
+    {
+        path: '/snacks',
+        redirect: '/snacks/rating',
+        icon: 'android-star-half',
+        name: 'ratesnack',
+        title: '评价小吃',
+        component: Main,
+        children: [
+            { path: 'add', title: '评价小吃', name: 'snack_rate', component: resolve => { require(['./views/snack/ratesnack.vue'], resolve); } }
         ]
     },
     {

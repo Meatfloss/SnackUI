@@ -12,9 +12,6 @@
                         <Icon type="pinpoint"></Icon>
                         小吃列表
                     </p>
-                    <!-- <Row>
-                        <Input v-model="searchConName1" icon="search" @on-change="handleSearch1" placeholder="请输入姓名搜索..." style="width: 200px" />
-                    </Row> -->
                     <Row class="margin-top-10">
                         <Table :columns="snackColumns" :data="snacks"></Table>
                     </Row>
