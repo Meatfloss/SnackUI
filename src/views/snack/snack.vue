@@ -26,18 +26,7 @@
 </template>
 
 <script>
-// import cityData from "./map-data/get-city-value.js";
-// import homeMap from "./components/map.vue";
-// import dataSourcePie from "./components/dataSourcePie.vue";
-// import visiteVolume from "./components/visiteVolume.vue";
-// import serviceRequests from "./components/serviceRequests.vue";
-// import userFlow from "./components/userFlow.vue";
-// import countUp from "./components/countUp.vue";
-// import inforCard from "./components/inforCard.vue";
-// import mapDataTable from "./components/mapDataTable.vue";
-// import toDoListItem from "./components/toDoListItem.vue";
 import util from "@/libs/util.js";
-
 export default {
   name: "snacks",
   data() {
@@ -54,8 +43,20 @@ export default {
           sortable: true
         },
         {
+          key: "province",
+          title: "省"
+        },
+                {
+          key: "city",
+          title: "市"
+        },
+        {
           key: "taste",
           title: "味道"
+        },
+        {
+          key: "texture",
+          title: "口感"
         },
         {
           key: "description",
@@ -121,8 +122,8 @@ export default {
     show(index) {
       this.$Modal.info({
         title: "用户信息",
-        content: `名字：${this.snacks[index].name}<br>价钱：${this.snacks[index]
-          .price}<br>味道：${this.snacks[index].taste || ""}<br>描述：${this.snacks[index].description || ""}`
+        content: `名字：${this.snacks[index].name}<br>省：${this.snacks[index].province || ""}<br>市：${this.snacks[index].city || ""}<br>价钱：${this.snacks[index]
+          .price}<br>味道：${this.snacks[index].taste || ""}<br>口感：${this.snacks[index].texture || ""}<br>描述：${this.snacks[index].description || ""}`
       });
     },
     remove(index) {
@@ -140,7 +141,10 @@ export default {
               _id: response.data[i]._id,
               name: response.data[i].name,
               price: response.data[i].price,
+              province: response.data[i].province,
+              city: response.data[i].city,
               taste: response.data[i].taste.toString(),
+              texture: response.data[i].texture.toString(),
               description: response.data[i].description,
               image: response.data[i].image_url
             });

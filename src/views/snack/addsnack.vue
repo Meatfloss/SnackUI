@@ -40,6 +40,7 @@
                 <Checkbox label="甜"></Checkbox>
                 <Checkbox label="香"></Checkbox>
                 <Checkbox label="辣"></Checkbox>
+                <Checkbox label="麻"></Checkbox>
                 <Checkbox label="特殊味道"></Checkbox>
             </CheckboxGroup>
         </FormItem>
@@ -99,6 +100,7 @@ export default {
         city: "",
         price: "$",
         taste: [],
+        texture: [],
         description: ""
       };
     }
