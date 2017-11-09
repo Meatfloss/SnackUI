@@ -89,13 +89,13 @@ export const appRouter = [
     },
     {
         path: '/snacks',
-        redirect: '/snacks/rating',
+        redirect: '/snacks/rate',
         icon: 'android-star-half',
         name: 'ratesnack',
         title: '评价小吃',
         component: Main,
         children: [
-            { path: 'add', title: '评价小吃', name: 'snack_rate', component: resolve => { require(['./views/snack/ratesnack.vue'], resolve); } }
+            { path: 'rate', title: '评价小吃', name: 'snack_rate', component: resolve => { require(['./views/snack/ratesnack.vue'], resolve); } }
         ]
     },
     {

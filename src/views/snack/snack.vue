@@ -60,9 +60,30 @@ export default {
           title: "描述"
         },
         {
-          key: "image",
-          title: "图片链接"
+          key: "rate",
+          title: "评价",
+          width: 200,
+          align: "center",
+          render:(h, params) =>{
+              var self = this;
+              return h("Rate",
+           {
+                domProps: {
+                  value: self.value
+                },
+                on: {
+                    input: function (event) {
+                        self.value = event.target.value
+                        self.$emit('input', event.target.value)
+                    }
+                },
+                props:{
+                  allowHalf: true
+                }
+              }, );
+          }
         }
+        //<Rate show-text allow-half v-model="valueCustomText">
         ,
         {
           title: "操作",
@@ -143,7 +164,8 @@ export default {
               taste: response.data[i].taste.toString(),
               texture: response.data[i].texture.toString(),
               description: response.data[i].description,
-              image: response.data[i].image_url
+              image: response.data[i].image_url,
+              rate: 4
             });
           }
         })
