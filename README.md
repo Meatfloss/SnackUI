@@ -7,9 +7,9 @@
 # iView Admin
 [![](https://img.shields.io/travis/iview/iview-admin.svg?style=flat-square)](https://travis-ci.org/iview/iview-admin)
 [![vue](https://img.shields.io/badge/vue-2.5.2-brightgreen.svg?style=flat-square)](https://github.com/vuejs/vue)
-[![iview ui](https://img.shields.io/badge/iview-2.5.0-brightgreen.svg?style=flat-square)](https://github.com/iview/iview)
+[![iview ui](https://img.shields.io/badge/iview-2.7.2-brightgreen.svg?style=flat-square)](https://github.com/iview/iview)
 
-## 当前版本：v1.1.5
+## 当前版本：v1.2.0
 [更新日志](https://github.com/iview/iview-admin/releases)
 
 [使用教程](https://github.com/iview/iview-admin/wiki)
@@ -17,13 +17,6 @@
 [在线访问](https://iview.github.io/iview-admin)
 
 `注：在线版本会在开发版本新小版本发布后更新到相应版本，所以如果想体验最新版本iview-admin，请clone完整项目代码到本地运行。`
-
-**v1.2.0预告**
-
-在不断充实v1.1.x版本的同时，iview-admin在进行大规模的整理，在接下来的v1.2.0版本中，将有如下变化：
-- 整理文件目录，对高耦合的部分进行拆分。
-- 优化完善开发和生产环境的配置。
-- 简化主体架构，组件随意拆装。
 
 ## Install
 ```bush
@@ -54,6 +47,7 @@ npm run build
 - 组件
     - 富文本编辑器
     - Markdown编辑器
+    - 城市级联
     - 图片预览编辑
     - 可拖拽列表
     - 文件上传
@@ -72,7 +66,7 @@ npm run build
         - 导出为Xls文件
     - 表格转图片
 - 错误页面
-    - 401页面
+    - 403页面
     - 404页面
     - 500页面
 - 高级路由
@@ -90,37 +84,40 @@ npm run build
 ## 文件结构
 ```shell
 .
-├── dist
-│   ├── langs    TinyMCE富文本编辑器语言包
-│   ├── plugins    TinyMCE富文本编辑器组件
-│   ├── skins    TinyMCE富文本编辑器皮肤
-│   └── themes    TinyMCE富文本编辑器主题
+├── build  项目构建配置
 └── src
-    ├── config    项目配置
-    ├── images    图片文件
-    ├── libs    工具方法
-    ├── styles    样式文件
-    ├── template    ejs模板
-    └── views    视图组件
-        ├── access    权限管理
-        ├── error_page    错误页面
-        ├── form    表单
-        │   ├── article-publish    文章发布
-        │   └── work-flow    工作流
-        ├── home    首页
-        ├── international    多语言切换
-        ├── main_components    主框架
-        ├── message    消息中心
-        ├── my_components    组件
-        │   ├── count-to    数字渐变
-        │   ├── draggable-list    可拖拽列表
-        │   ├── file-upload    文件上传
-        |   ├── image-editor    图片预览编辑
-        │   ├── markdown-editor    markdown编辑器
-        │   └── text-editer    富文本编辑器
-        ├── own-space    个人中心
-        ├── screen-shorts    锁屏
-        └── tables    表格
+    ├── images  图片文件
+    ├── libs  工具方法
+    ├── locale  多语言文件
+    ├── router  路由配置
+    ├── store  状态管理
+    ├── store  状态管理
+    ├── styles  样式文件
+    ├── template  模板文件
+    ├── vendors  公共库文件
+    └── views
+        ├── access  权限管理
+        ├── advanced-router  高级路由
+        ├── error_page  错误页面
+        ├── form  表单编辑
+        ├── home  首页
+        │   ├── components  首页组件
+        ├── international  多语言
+        ├── main_components  Main组件
+        │   ├── lockscreen  锁屏
+        │   ├── shrinkable-menu  可收缩菜单
+        │   └── theme-switch  主题切换
+        ├── message  消息中心
+        ├── my_components  业务组件
+        │   ├── area-linkage  中国行政区级联选择器
+        │   ├── count-to  数字渐变
+        │   ├── draggable-list  可拖拽列表
+        │   ├── file-upload  文件上传
+        │   ├── image-editor  图片预览编辑
+        │   ├── markdown-editor  Markdown编辑器
+        │   └── text-editor  富文本编辑器
+        ├── own-space  个人中心
+        └── tables  综合表格
 ```
 
 ## Links
