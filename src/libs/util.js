@@ -14,7 +14,7 @@ util.title = function (title) {
 const ajaxUrl = env === 'development'
     ? 'http://127.0.0.1:3000/api'
     : env === 'production'
-    ? 'https://www.url.com'
+    ? 'http://127.0.0.1:3000/api'
     : 'https://debug.url.com';
 
 util.ajax = axios.create({
