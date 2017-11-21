@@ -110,22 +110,21 @@ export default {
                 },
                 "查看"
               ),
-              h('Button', {
-                            props: {
-                                type: 'error',
-                                size: 'small'
-                            },
-                            on: {
-                                click: () => {
-                                    let argu = { snack_id: params.row._id };
-                                    util.openNewPage(this, 'snack_rate', argu);
-                                    this.$router.push({
-                                        name: 'snack_rate',
-                                        params: argu
-                                    });
-                                }
-                            }
-                        }, '去评价')
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index);
+                    }
+                  }
+                },
+                "删除"
+              )
             ]);
           }
         }

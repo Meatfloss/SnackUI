@@ -67,6 +67,17 @@ export const otherRouter = {
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
     {
+        path: '/admin',
+        // redirect: '/admin/snacks',
+        icon: 'android-restaurant',
+        name: 'snacks-admin',
+        title: '小吃列表-管理员',
+        component: Main,
+        children: [
+            { path: 'snacks', title: '小吃列表-管理', name: 'snack_admin_index', component: resolve => { require(['@/views/snack/snack-admin.vue'], resolve); } }
+        ]
+    },
+    {
         path: '/snacks',
         redirect: '/snacks/index',
         icon: 'android-restaurant',
