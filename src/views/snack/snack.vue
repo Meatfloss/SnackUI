@@ -124,7 +124,23 @@ export default {
                   }
                 },
                 "删除"
-              )
+              ),
+              h('Button', {
+                            props: {
+                                type: 'text',
+                                size: 'small'
+                            },
+                            on: {
+                                click: () => {
+                                    let argu = { snack_id: params.row._id };
+                                    util.openNewPage(this, 'snack_rate', argu);
+                                    this.$router.push({
+                                        name: 'snack_rate',
+                                        params: argu
+                                    });
+                                }
+                            }
+                        }, '了解详情')
             ]);
           }
         }

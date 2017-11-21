@@ -20,6 +20,7 @@
     <p slot="title">
             <Icon type="ios-plus-outline"></Icon>
             评价小吃
+            {{this.$route.params}}
         </p>
  <Form :model="rate" :label-width="80">
         <!-- <FormItem label="小吃名字">
@@ -50,12 +51,33 @@ export default {
   name: "snacks",
   data() {
     return {
-      rate:{
-          value: 1,
-          description: "TESt"
+      rate: {
+        value: 1,
+        description: "TESt"
       }
-
     };
+  },
+  methods: {
+    getRates: function(snackId) {
+      util.ajax
+        .get(`snacks/${snackId}/rates`)
+        .then(response => {
+
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
+    },
+    createRate: function(snackId) {
+      util.ajax
+        .post(`snacks/${snackId}/rates`, this.rate)
+        .then(response => {
+
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
+    }
   }
 };
 </script>

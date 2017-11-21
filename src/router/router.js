@@ -59,7 +59,8 @@ export const otherRouter = {
         { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: resolve => { require(['@/views/own-space/own-space.vue'], resolve); } },
         { path: 'order/:order_id', title: '订单详情', name: 'order_info', component: resolve => { require(['@/views/advanced-router/component/order-info.vue'], resolve); } },  // 用于展示动态路由
         { path: 'shopping', title: '购物详情', name: 'shopping', component: resolve => { require(['@/views/advanced-router/component/shopping-info.vue'], resolve); } },  // 用于展示带参路由
-        { path: 'message', title: '消息中心', name: 'message_index', component: resolve => { require(['@/views/message/message.vue'], resolve); } }
+        { path: 'message', title: '消息中心', name: 'message_index', component: resolve => { require(['@/views/message/message.vue'], resolve); } },
+        { path: 'snack/:snack_id/rates', title: '评价小吃', name: 'snack_rate', component: resolve => { require(['@/views/snack/ratesnack.vue'], resolve); } } // 用于展示动态路由
     ]
 };
 
@@ -88,8 +89,8 @@ export const appRouter = [
         ]
     },
     {
-        path: '/snacks',
-        redirect: '/snacks/rate',
+        path: '/snacks/:id/rate',
+        // redirect: '/snacks/:id/rate',
         icon: 'android-star-half',
         name: 'ratesnack',
         title: '评价小吃',
