@@ -3,19 +3,6 @@
 @import "../../styles/common.less";
 </style>
 <template>
-      <!-- <Row class="margin-top-10">
-
-        <Col span="12">
-        <Card>
-            <Rate show-text allow-half v-model="valueCustomText">
-                <span style="color: #f5a623">{{ valueCustomText }}</span>
-            </Rate>
-        </Card>
-
-        </Col>
-    </Row> -->
-
-
     <Card>
     <p slot="title">
             <Icon type="ios-plus-outline"></Icon>
@@ -38,7 +25,7 @@
 
 
         <FormItem>
-            <Button type="primary" @click="createSnack">提交</Button>
+            <Button type="primary" @click="createRate">提交</Button>
             <Button type="ghost" style="margin-left: 8px">取消</Button>
         </FormItem>
     </Form>
@@ -68,14 +55,15 @@ export default {
           this.errors.push(e);
         });
     },
-    createRate: function(snackId) {
+    createRate: function() {
+      var snackId = this.$route.params.snack_id;
       util.ajax
         .post(`snacks/${snackId}/rates`, this.rate)
         .then(response => {
-
+          this.$Message.success("添加成功!");
         })
         .catch(e => {
-          this.errors.push(e);
+
         });
     }
   }

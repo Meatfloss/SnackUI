@@ -61,26 +61,19 @@ export default {
         },
         {
           key: "rate",
-          title: "评价",
+          title: "评价1",
           width: 200,
           align: "center",
           render:(h, params) =>{
               var self = this;
               return h("Rate",
            {
-                domProps: {
-                  value: self.value
-                },
-                on: {
-                    input: function (event) {
-                        self.value = event.target.value
-                        self.$emit('input', event.target.value)
-                    }
-                },
                 props:{
-                  allowHalf: true
-                }
-              }, );
+                  allowHalf: true,
+                  value: params.row.rate
+                },
+                on: { input: (value) => { this.message = value } }
+              });
           }
         }
         //<Rate show-text allow-half v-model="valueCustomText">
