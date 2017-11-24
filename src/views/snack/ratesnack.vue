@@ -39,8 +39,10 @@ export default {
   data() {
     return {
       rate: {
-        value: 1,
-        description: "TESt"
+        value: 0,
+        description: "",
+        user_name: "tester",
+        snack_id: this.$route.params.snack_id
       }
     };
   },

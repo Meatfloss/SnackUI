@@ -43,7 +43,7 @@ export default {
           key: "province",
           title: "省"
         },
-                {
+        {
           key: "city",
           title: "市"
         },
@@ -61,23 +61,40 @@ export default {
         },
         {
           key: "rate",
-          title: "评价1",
+          title: "评价",
           width: 200,
           align: "center",
-          render:(h, params) =>{
-              var self = this;
-              return h("Rate",
-           {
-                props:{
-                  allowHalf: true,
-                  value: params.row.rate
-                },
-                on: { input: (value) => { this.message = value } }
-              });
+          // render: (h, params) => {
+          //   return h("Rate", {
+          //     props: {
+          //       value: params.row.rate,
+          //       showText: true,
+          //       allowHalf: true,
+          //       disabled: true
+          //     }
+          //   });
+          // }
+          render: (h, params) => {
+            return h("a",
+              {
+                attrs: {
+                  href:"shit!"
+                }
+              },
+              [
+                h("Rate", {
+                  props: {
+                    value: params.row.rate,
+                    //showText: true,
+                    allowHalf: true,
+                    disabled: true
+                  }
+                })
+              ]
+            );
           }
-        }
+        },
         //<Rate show-text allow-half v-model="valueCustomText">
-        ,
         {
           title: "操作",
           key: "action",
@@ -103,22 +120,26 @@ export default {
                 },
                 "查看"
               ),
-              h('Button', {
-                            props: {
-                                type: 'error',
-                                size: 'small'
-                            },
-                            on: {
-                                click: () => {
-                                    let argu = { snack_id: params.row._id };
-                                    util.openNewPage(this, 'snack_rate', argu);
-                                    this.$router.push({
-                                        name: 'snack_rate',
-                                        params: argu
-                                    });
-                                }
-                            }
-                        }, '去评价')
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      let argu = { snack_id: params.row._id };
+                      util.openNewPage(this, "snack_rate", argu);
+                      this.$router.push({
+                        name: "snack_rate",
+                        params: argu
+                      });
+                    }
+                  }
+                },
+                "去评价"
+              )
             ]);
           }
         }
@@ -134,14 +155,17 @@ export default {
     show(index) {
       this.$Modal.info({
         title: "用户信息",
-        content: `名字：${this.snacks[index].name}<br>省：${this.snacks[index].province || ""}<br>市：${this.snacks[index].city || ""}<br>价钱：${this.snacks[index]
-          .price}<br>味道：${this.snacks[index].taste || ""}<br>口感：${this.snacks[index].texture || ""}<br>描述：${this.snacks[index].description || ""}`
+        content: `名字：${this.snacks[index].name}<br>省：${this.snacks[index]
+          .province || ""}<br>市：${this.snacks[index].city || ""}<br>价钱：${this
+          .snacks[index].price}<br>味道：${this.snacks[index].taste ||
+          ""}<br>口感：${this.snacks[index].texture || ""}<br>描述：${this.snacks[
+          index
+        ].description || ""}`
       });
     },
     remove(index) {
       this.deleteSnack(this.snacks[index]);
       this.snacks.splice(index, 1);
-
     },
     getSnacks() {
       util.ajax
@@ -159,7 +183,7 @@ export default {
               texture: response.data[i].texture.toString(),
               description: response.data[i].description,
               image: response.data[i].image_url,
-              rate: 4
+              rate: response.data[i].average_rate
             });
           }
         })
@@ -177,7 +201,7 @@ export default {
         .catch(e => {
           this.errors.push(e);
         });
-    },
+    }
   },
   mounted() {
     this.getSnacks();
