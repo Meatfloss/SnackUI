@@ -60,7 +60,8 @@ export const otherRouter = {
         { path: 'order/:order_id', title: '订单详情', name: 'order_info', component: resolve => { require(['@/views/advanced-router/component/order-info.vue'], resolve); } },  // 用于展示动态路由
         { path: 'shopping', title: '购物详情', name: 'shopping', component: resolve => { require(['@/views/advanced-router/component/shopping-info.vue'], resolve); } },  // 用于展示带参路由
         { path: 'message', title: '消息中心', name: 'message_index', component: resolve => { require(['@/views/message/message.vue'], resolve); } },
-        { path: 'snack/:snack_id/rates', title: '评价小吃', name: 'snack_rate', component: resolve => { require(['@/views/snack/ratesnack.vue'], resolve); } } // 用于展示动态路由
+        { path: 'snack/:snack_id/rate', title: '评价小吃', name: 'rate_snack', component: resolve => { require(['@/views/snack/ratesnack.vue'], resolve); } }, // 用于展示动态路由
+        { path: 'snack/:snack_id/rates', title: '评价列表', name: 'snack_rates', component: resolve => { require(['@/views/snack/snackrates.vue'], resolve); } } // 用于展示动态路由
     ]
 };
 
@@ -97,17 +98,6 @@ export const appRouter = [
         component: Main,
         children: [
             { path: 'add', title: '小吃列表', name: 'snack_add', component: resolve => { require(['@/views/snack/addsnack.vue'], resolve); } }
-        ]
-    },
-    {
-        path: '/snacks/:id/rate',
-        // redirect: '/snacks/:id/rate',
-        icon: 'android-star-half',
-        name: 'ratesnack',
-        title: '评价小吃',
-        component: Main,
-        children: [
-            { path: 'rate', title: '评价小吃', name: 'snack_rate', component: resolve => { require(['@/views/snack/ratesnack.vue'], resolve); } }
         ]
     },
     {

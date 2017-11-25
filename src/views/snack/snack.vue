@@ -64,22 +64,19 @@ export default {
           title: "评价",
           width: 200,
           align: "center",
-          // render: (h, params) => {
-          //   return h("Rate", {
-          //     props: {
-          //       value: params.row.rate,
-          //       showText: true,
-          //       allowHalf: true,
-          //       disabled: true
-          //     }
-          //   });
-          // }
           render: (h, params) => {
             return h("a",
               {
-                attrs: {
-                  href:"shit!"
-                }
+                on: {
+                    click: () => {
+                      let argu = { snack_id: params.row._id };
+                      util.openNewPage(this, "snack_rates", argu);
+                      this.$router.push({
+                        name: "snack_rates",
+                        params: argu
+                      });
+                    }
+                  }
               },
               [
                 h("Rate", {
@@ -130,15 +127,15 @@ export default {
                   on: {
                     click: () => {
                       let argu = { snack_id: params.row._id };
-                      util.openNewPage(this, "snack_rate", argu);
+                      util.openNewPage(this, "rate_snack", argu);
                       this.$router.push({
-                        name: "snack_rate",
+                        name: "rate_snack",
                         params: argu
                       });
                     }
                   }
                 },
-                "去评价"
+                "去评价1"
               )
             ]);
           }
