@@ -90,7 +90,6 @@
             return {
                 shrink: false,
                 userName: '',
-                mesCount: 3,
                 isFullScreen: false,
                 openedSubmenuArr: this.$store.state.app.openedSubmenuArr
             };
@@ -116,11 +115,15 @@
             },
             menuTheme () {
                 return this.$store.state.app.menuTheme;
+            },
+            mesCount () {
+                return this.$store.state.app.messageCount;
             }
         },
         methods: {
             init () {
                 let pathArr = util.setCurrentPath(this, this.$route.name);
+                this.$store.commit('updateMenulist');
                 if (pathArr.length >= 2) {
                     this.$store.commit('addOpenSubmenu', pathArr[1].name);
                 }
@@ -128,6 +131,7 @@
                 let messageCount = 3;
                 this.messageCount = messageCount.toString();
                 this.checkTag(this.$route.name);
+                this.$store.commit('setMessageCount', 3);
             },
             toggleClick () {
                 this.shrink = !this.shrink;
@@ -161,11 +165,12 @@
                 // console.log(val)
             },
             beforePush (name) {
-                if (name === 'accesstest_index') {
-                    return false;
-                } else {
-                    return true;
-                }
+                // if (name === 'accesstest_index') {
+                //     return false;
+                // } else {
+                //     return true;
+                // }
+                return true;
             },
             fullscreenChange (isFullScreen) {
                 // console.log(isFullScreen);

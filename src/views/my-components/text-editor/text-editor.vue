@@ -15,7 +15,7 @@
 </template>
 
 <script>
-const tinymce = require('tinymce');
+import tinymce from 'tinymce';
 export default {
     name: 'text-editor',
     data () {
@@ -27,7 +27,7 @@ export default {
         init () {
             this.$nextTick(() => {
                 let vm = this;
-                var height = document.body.offsetHeight - 300;
+                let height = document.body.offsetHeight - 300;
                 tinymce.init({
                     selector: '#tinymceEditer',
                     branding: false,
