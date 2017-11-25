@@ -8,20 +8,15 @@
             <Icon type="ios-plus-outline"></Icon>
             评价小吃
             {{this.$route.params}}
-        </p>
-
-<Scroll :on-reach-bottom="handleReachBottom">
-        <Card dis-hover v-for="(rate, index) in rates" :key="index" style="margin: 32px 0">
-        <FormItem label="评价">
-           <Rate disabled allow-half v-model="rate.value">
+    </p>
+    <Scroll :on-reach-bottom="handleReachBottom" :height="550">
+        <Card dis-hover v-for="(rate, index) in rates" :key="index" style="margin: 32px 10px">
+            <Rate disabled allow-half v-model="rate.value">
             </Rate>
-        </FormItem>
-
-        <FormItem label="描述">
           <label>{{rate.description}}</label>
-            <Input v-model="rate.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
-        </FormItem>
-
+        </Card>
+        <Card v-if="showEnd">
+          <label>没有评论了</label>
         </Card>
     </Scroll>
 
@@ -34,15 +29,19 @@ export default {
   name: "snacks",
   data() {
     return {
-      rates: []
+      rates: [],
+      currentIndex: 1,
+      showEnd: false
     };
   },
   methods: {
-    getRates: function(snackId) {
+    getRates: function(index) {
+      var snackId = this.$route.params.snack_id;
       util.ajax
-        .get(`snacks/${snackId}/rates`)
+        .get(`snacks/${snackId}/rates/${index}`)
         .then(response => {
-          this.rates = response.data;
+          if(!response.data || !response.data.length) this.showEnd = true;
+          this.rates.push.apply(this.rates, response.data);
         })
         .catch(e => {
           this.errors.push(e);
@@ -56,10 +55,23 @@ export default {
           this.$Message.success("添加成功!");
         })
         .catch(e => {});
+    },
+    handleReachBottom() {
+      if(this.showEnd) return;
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // const last = this.rates[this.rates.length - 1];
+          // for (let i = 1; i < 11; i++) {
+          //   this.rates.push(last + i);
+          // }
+          this.getRates(this.currentIndex++);
+          resolve();
+        }, 2000);
+      });
     }
   },
   mounted() {
-    this.getSnacks();
+    this.getRates(0);
   }
 };
 </script>
