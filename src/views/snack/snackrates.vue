@@ -12,9 +12,13 @@
     <p><Icon type="plus" />添加评论</p>
     <Scroll :on-reach-bottom="handleReachBottom" :height="550">
         <Card dis-hover v-for="(rate, index) in rates" :key="index" style="margin: 20px 10px">
+          <Row>
             <Rate disabled allow-half v-model="rate.value">
             </Rate>
-          <label>{{rate.description}}</label>
+          <label>{{rate.subject}}</label>
+          </Row>
+          <Row>By {{rate.user_name}} {{rate.createdAt}}</Row>
+          <Row><label>{{rate.description}}</label></Row>
         </Card>
         <Card v-if="showEnd">
           <label>没有评论了</label>
@@ -42,7 +46,13 @@ export default {
         .get(`snacks/${snackId}/rates/${index}`)
         .then(response => {
           if(!response.data || !response.data.length) this.showEnd = true;
-          this.rates.push.apply(this.rates, response.data);
+          else{
+            for(var i = 0; i<response.data.length; i++)
+            {
+              response.data[i].createdAt = response.data[i].createdAt.slice(0, response.data[i].createdAt.indexOf("T"));
+            }
+            this.rates.push.apply(this.rates, response.data);
+          }
         })
         .catch(e => {
           this.errors.push(e);
