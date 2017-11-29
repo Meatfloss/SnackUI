@@ -9,7 +9,26 @@
             评价小吃
             {{this.$route.params}}
     </p>
-    <p><Icon type="plus" />添加评论</p>
+    <p @click="toggleAddRage"><Icon type="plus" />添加评论</p>
+        <Card dis-hover style="margin: 20px 10px" v-if="showAddRate">
+     <Form :model="rate" :label-width="80">
+        <FormItem label="评价">
+           <Rate show-text allow-half v-model="rate.value">
+                <span style="color: #f5a623">{{ rate.value }}</span>
+            </Rate>
+        </FormItem>
+        <FormItem label="主题">
+            <Input v-model="rate.subject" placeholder="主题"></Input>
+        </FormItem>
+        <FormItem label="描述">
+            <Input v-model="rate.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+        </FormItem>
+        <FormItem>
+            <Button type="primary" @click="createRate">提交</Button>
+            <Button type="ghost" @click="clearInputs" style="margin-left: 8px">清空</Button>
+        </FormItem>
+    </Form>
+    </Card>
     <Scroll :on-reach-bottom="handleReachBottom" :height="550">
         <Card dis-hover v-for="(rate, index) in rates" :key="index" style="margin: 20px 10px">
           <Row>
@@ -35,8 +54,16 @@ export default {
   data() {
     return {
       rates: [],
+      rate: {
+        value: 0,
+        subject: "",
+        description: "",
+        user_name: "tester",
+        snack_id: this.$route.params.snack_id
+      },
       currentIndex: 1,
-      showEnd: false
+      showEnd: false,
+      showAddRate: false
     };
   },
   methods: {
@@ -45,11 +72,13 @@ export default {
       util.ajax
         .get(`snacks/${snackId}/rates/${index}`)
         .then(response => {
-          if(!response.data || !response.data.length) this.showEnd = true;
-          else{
-            for(var i = 0; i<response.data.length; i++)
-            {
-              response.data[i].createdAt = response.data[i].createdAt.slice(0, response.data[i].createdAt.indexOf("T"));
+          if (!response.data || !response.data.length) this.showEnd = true;
+          else {
+            for (var i = 0; i < response.data.length; i++) {
+              response.data[i].createdAt = response.data[i].createdAt.slice(
+                0,
+                response.data[i].createdAt.indexOf("T")
+              );
             }
             this.rates.push.apply(this.rates, response.data);
           }
@@ -67,18 +96,22 @@ export default {
         })
         .catch(e => {});
     },
-    handleReachBottom() {
-      if(this.showEnd) return;
+    handleReachBottom: function() {
+      if (this.showEnd) return;
       return new Promise(resolve => {
         setTimeout(() => {
-          // const last = this.rates[this.rates.length - 1];
-          // for (let i = 1; i < 11; i++) {
-          //   this.rates.push(last + i);
-          // }
           this.getRates(this.currentIndex++);
           resolve();
         }, 2000);
       });
+    },
+    toggleAddRage: function(){
+      this.showAddRate = !this.showAddRate;
+    },
+    clearInputs: function(){
+      this.rate.value = 0;
+      this.rate.subject = "";
+      this.rate.description = "";
     }
   },
   mounted() {
