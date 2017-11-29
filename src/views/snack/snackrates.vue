@@ -9,8 +9,9 @@
             评价小吃
             {{this.$route.params}}
     </p>
+    <p><Icon type="plus" />添加评论</p>
     <Scroll :on-reach-bottom="handleReachBottom" :height="550">
-        <Card dis-hover v-for="(rate, index) in rates" :key="index" style="margin: 32px 10px">
+        <Card dis-hover v-for="(rate, index) in rates" :key="index" style="margin: 20px 10px">
             <Rate disabled allow-half v-model="rate.value">
             </Rate>
           <label>{{rate.description}}</label>
