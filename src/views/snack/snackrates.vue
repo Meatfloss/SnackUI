@@ -9,7 +9,8 @@
             评价小吃
             {{this.$route.params}}
     </p>
-    <Button type="primary" @click="toggleAddRage"><Icon type="plus" />添加新评论</Button>
+    <Button type="primary" @click="toggleAddRage" v-if="!showAddRate"><Icon type="ios-plus-outline"></Icon> 添加新评论</Button>
+    <Button type="primary" @click="toggleAddRage" v-if="showAddRate"><Icon type="ios-minus-outline"></Icon> 隐藏新评论</Button>
     <Card dis-hover style="margin: 20px 10px" v-if="showAddRate">
         <Form :model="rate" :label-width="80">
            <FormItem label="评价">
@@ -31,7 +32,7 @@
     </Card>
     <p class="margin-top-20">
         <Icon type="android-star" style="color: #f5a623"></Icon>
-        <Select size="small" style="width:120px" v-model="starFilter" @change="updateStarFilter()">
+        <Select size="small" style="width:120px" v-model="starFilter" :on-change="updateStarFilter()">
             <Option v-for="item in starList" :value="item.value" :key="item.text">{{item.text}}</Option>
         </Select>
     </p>
@@ -80,28 +81,6 @@ export default {
       showEnd: false,
       showAddRate: false
     };
-  },
-  watch: {
-    starFilter: function() {
-      var snackId = this.$route.params.snack_id;
-      util.ajax
-        .get(`snacks/${snackId}/rates/${this.starFilter}/0`)
-        .then(response => {
-          if (!response.data || !response.data.length) this.showEnd = true;
-          else {
-            for (var i = 0; i < response.data.length; i++) {
-              response.data[i].createdAt = response.data[i].createdAt.slice(
-                0,
-                response.data[i].createdAt.indexOf("T")
-              );
-            }
-          }
-          this.rates = response.data;
-        })
-        .catch(e => {
-          this.errors.push(e);
-        });
-    }
   },
   methods: {
     getRates: function(starValue, index) {
@@ -160,6 +139,26 @@ export default {
           resolve();
         }, 2000);
       });
+    },
+    updateStarFilter: function(){
+      var snackId = this.$route.params.snack_id;
+      util.ajax
+        .get(`snacks/${snackId}/rates/${this.starFilter}/0`)
+        .then(response => {
+          if (!response.data || !response.data.length) this.showEnd = true;
+          else {
+            for (var i = 0; i < response.data.length; i++) {
+              response.data[i].createdAt = response.data[i].createdAt.slice(
+                0,
+                response.data[i].createdAt.indexOf("T")
+              );
+            }
+          }
+          this.rates = response.data;
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
     },
     toggleAddRage: function() {
       this.showAddRate = !this.showAddRate;
