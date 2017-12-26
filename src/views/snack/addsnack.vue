@@ -7,8 +7,12 @@
     <p slot="title">
             <Icon type="ios-plus-outline"></Icon>
             请输入小吃信息
-        </p>
- <Form :model="snack" :label-width="80">
+    </p>
+<!-- <image-editor></image-editor> -->
+
+<upload-editor></upload-editor>
+
+    <Form :model="snack" :label-width="80">
         <FormItem label="小吃名字">
             <Input v-model="snack.name" placeholder="请输入"></Input>
         </FormItem>
@@ -71,14 +75,25 @@
 <script>
 import { provinces, cityInfo } from "./data/city-data.js";
 import util from "@/libs/util.js";
+import imageEditor from './components/image-editor.vue';
+import uploadEditor from './components/upload.vue';
 
 export default {
   data() {
     return {
+        cropper1: {},
+            option1: {
+                showCropedImage: false,
+                cropedImg: ''
+            },
       snack: this.getNewSnack(),
       provinces: provinces
     };
   },
+  components: {
+        imageEditor,
+        uploadEditor
+    },
   methods: {
     createSnack: function() {
       util.ajax
